@@ -37,7 +37,9 @@ class SelectionEnum(Enum):
     allMakes = 'All Makes'
     popMakes = 'Popular Makes'
 
-    Models = ['Popular Models', 'Other Models']
+    Models = ('Popular Models', 'Other Models')
+
+    allYears = 'All Years'
 
     Listing = 'window.__PREFLIGHT__ = '
 
@@ -111,8 +113,8 @@ def clean_selection(selection: str):
     selection_cleaned = selection_cleaned[1:]
     selection_dict = dict()
     for value in selection_cleaned:
-        ssplit = value.split(' ')
-        selection_dict[ssplit[1]] = ssplit[0]
+        ssplit = value.split(' ', 1)
+        selection_dict[ssplit[0]] = ssplit[1]
     return selection_dict
 
 
@@ -142,16 +144,33 @@ def get_model_id(make_id: str = None):
     :param make_id: The carguru's make ID.
     :return: A dict where the keys are the model names and the values are the carguru's ID.
     """
-    model_url = f'https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?' \
+    make_url = f'https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?' \
                 f'sourceContext=carGurusHomePageModel&entitySelectingHelper.selectedEntity={make_id}'
 
-    soup = get_soup_group(model_url)
+    soup = get_soup_group(make_url)
     models = get_selection(soup, SelectionEnum.Models, 'optgroup')
     models_dict = clean_selection(models[0])
     models_dict.update(clean_selection(models[1]))
-    models_dict = {make_id: models_dict}
+    # models_dict = {make_id: models_dict}
 
     return models_dict
+
+
+def get_year_id(model_id: str = None):
+    """
+    Get all year id's from cargurus for the specified model.
+
+    :param model_id: The carguru's model ID.
+    :return: A dict where the keys are the years and the values are the carguru's ID.
+    """
+    model_url = f'https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?' \
+                f'sourceContext=carGurusHomePageModel&entitySelectingHelper.selectedEntity={model_id}'
+
+    soup = get_soup_group(model_url)
+    years = get_selection(soup, SelectionEnum.allYears, 'select')
+    years = clean_selection(years[0])
+
+    return years
 
 
 def get_listings(soup):
@@ -240,15 +259,44 @@ def get_listings(soup):
 
 
 # test = get_model_id('m42')
+# test = get_year_id('d215')
 # test = get_listings(get_soup_group('https://www.cargurus.com/Cars/inventorylisting/viewDetailsFilterViewInventoryListing.action?zip=06066&showNegotiable=true&sortDir=ASC&sourceContext=carGurusHomePageModel&distance=50&sortType=DEAL_SCORE&entitySelectingHelper.selectedEntity=d214'))
 # print(json.dumps(test, indent=3))
 # print(len(test))
-makes = get_make_id(SelectionEnum.popMakes)
-# with open('makes,json', 'w') as outfile:
-#     json.dump(makes, outfile)
-makes_keys = makes.keys()
-models_dict = dict()
-for key in makes_keys:
-    models = get_model_id(makes[key])
-    models_dict = {**models_dict, **models}
-print(json.dumps(models_dict, indent=3))
+
+if __name__ == '__main__':
+    create_makes = False
+    create_models = False
+    create_years = False
+    test_year = 'm42'
+
+    if create_makes:
+        makes = get_make_id(SelectionEnum.popMakes)
+        with open('makes.json', 'w') as outfile:
+            json.dump(makes, outfile, indent=3)
+    else:
+        with open('makes.json') as f:
+            makes = json.load(f)
+
+    makes_keys = makes.keys()
+
+    if create_models:
+        models_dict = dict()
+        for key in makes_keys:
+            models = get_model_id(key)
+            models_dict[key] = models
+        with open('models.json', 'w') as outfile:
+            json.dump(models_dict, outfile, indent=3)
+    else:
+        with open('models.json') as f:
+            models_dict = json.load(f)
+
+    if create_years:
+        years_dict = dict()
+        if test_year is not None:
+            models_keys = models_dict[test_year].keys()
+            for model_id in models_keys:
+                years = get_year_id(model_id)
+                years_dict[model_id] = years
+            with open('mazda_years.json', 'w') as outfile:
+                json.dump(years_dict, outfile, indent=3)
