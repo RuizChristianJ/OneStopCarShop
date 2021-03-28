@@ -265,38 +265,38 @@ def get_listings(soup):
 # print(len(test))
 
 if __name__ == '__main__':
-    create_makes = False
-    create_models = False
-    create_years = False
-    test_year = 'm42'
-
-    if create_makes:
-        makes = get_make_id(SelectionEnum.popMakes)
-        with open('makes.json', 'w') as outfile:
-            json.dump(makes, outfile, indent=3)
-    else:
-        with open('makes.json') as f:
-            makes = json.load(f)
-
-    makes_keys = makes.keys()
-
-    if create_models:
-        models_dict = dict()
-        for key in makes_keys:
-            models = get_model_id(key)
-            models_dict[key] = models
-        with open('models.json', 'w') as outfile:
-            json.dump(models_dict, outfile, indent=3)
-    else:
-        with open('models.json') as f:
-            models_dict = json.load(f)
-
-    if create_years:
-        years_dict = dict()
-        if test_year is not None:
-            models_keys = models_dict[test_year].keys()
-            for model_id in models_keys:
-                years = get_year_id(model_id)
-                years_dict[model_id] = years
-            with open('mazda_years.json', 'w') as outfile:
-                json.dump(years_dict, outfile, indent=3)
+    # create_makes = False
+    # create_models = False
+    # create_years = False
+    # test_year = 'm42'
+    #
+    # if create_makes:
+    #     makes = get_make_id(SelectionEnum.popMakes)
+    #     with open('makes.json', 'w') as outfile:
+    #         json.dump(makes, outfile, indent=3)
+    # else:
+    #     with open('makes.json') as f:
+    #         makes = json.load(f)
+    #
+    # makes_keys = makes.keys()
+    #
+    # if create_models:
+    #     models_dict = dict()
+    #     for key in makes_keys:
+    #         models = get_model_id(key)
+    #         models_dict[key] = models
+    #     with open('models.json', 'w') as outfile:
+    #         json.dump(models_dict, outfile, indent=3)
+    # else:
+    #     with open('models.json') as f:
+    #         models_dict = json.load(f)
+    #
+    # if create_years:
+    #     years_dict = dict()
+    #     if test_year is not None:
+    #         models_keys = models_dict[test_year].keys()
+    #         for model_id in models_keys:
+    #             years = get_year_id(model_id)
+    #             years_dict[model_id] = years
+    #         with open('mazda_years.json', 'w') as outfile:
+    #             json.dump(years_dict, outfile, indent=3)
