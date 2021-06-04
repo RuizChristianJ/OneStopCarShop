@@ -42,6 +42,8 @@ Congratulations! You can now use Selenium and headless-chromium on AWS Lambda!
 ## Special Thanks
 Special thanks to the following resources for inspiration and guidance on how to complete this project:
 
-Getting headless-chromium working on AWS Lambda - https://github.com/jairovadillo/pychromeless 
+Getting headless-chromium working on AWS Lambda - https://github.com/jairovadillo/pychromeless
+
 Creating Lambda Layers with dependencies installed - https://towardsdatascience.com/python-packages-in-aws-lambda-made-easy-8fbc78520e30
+
 Creating a REST API using API Gateway and AWS Lambda - https://www.youtube.com/c/BeABetterDev/videos
