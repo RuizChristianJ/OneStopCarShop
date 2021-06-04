@@ -266,13 +266,14 @@ def get_listings(soup):
 # print(len(test))
 
 if __name__ == '__main__':
-    create_makes = True
+    create_makes = False
     create_models = True
     # create_years = False
     # test_year = 'm42'
     #
+    tic = time.process_time()
     if create_makes:
-        makes = get_make_id(SelectionEnum.allMakes)
+        makes = get_make_id(SelectionEnum.popMakes)
         with open('../makes.json', 'w') as outfile:
             json.dump(makes, outfile, indent=3)
     else:
@@ -281,17 +282,24 @@ if __name__ == '__main__':
 
     makes_keys = makes.keys()
     print(makes_keys)
+    toc = time.process_time()
+    print(toc - tic)
 
-    # if create_models:
-    #     models_dict = dict()
-    #     for key in makes_keys:
-    #         models = get_model_id(key)
-    #         models_dict[key] = models
-    #     with open('models.json', 'w') as outfile:
-    #         json.dump(models_dict, outfile, indent=3)
-    # else:
-    #     with open('models.json') as f:
-    #         models_dict = json.load(f)
+
+    tic = time.process_time()
+    if create_models:
+        models_dict = dict()
+        for key in makes_keys:
+            if key[0] == 'A':
+                models = get_model_id(makes[key])
+                models_dict[key] = models
+        with open('models.json', 'w') as outfile:
+            json.dump(models_dict, outfile, indent=3)
+    else:
+        with open('models.json') as f:
+            models_dict = json.load(f)
+    toc = time.process_time()
+    print(toc - tic)
     #
     # if create_years:
     #     years_dict = dict()

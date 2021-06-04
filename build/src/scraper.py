@@ -1,18 +1,17 @@
 import os
 import shutil
 import logging
-from selenium import webdriver
 import json
 from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import math
 from enum import Enum
 import random
-import uuid
+import pandas as pd
+
 
 logger = logging.getLogger()
+
 
 class SelectionEnum(Enum):
     """
@@ -34,39 +33,19 @@ class WebDriverWrapper:
     def __init__(self):
 
         chrome_options = webdriver.ChromeOptions()
-        # self._tmp_folder = '/tmp/{}'.format(uuid.uuid4())
-        #
-        # if not os.path.exists(self._tmp_folder):
-        #     os.makedirs(self._tmp_folder)
-        #
-        # if not os.path.exists(self._tmp_folder + '/user-data'):
-        #     os.makedirs(self._tmp_folder + '/user-data')
-        #
-        # if not os.path.exists(self._tmp_folder + '/data-path'):
-        #     os.makedirs(self._tmp_folder + '/data-path')
-        #
-        # if not os.path.exists(self._tmp_folder + '/cache-dir'):
-        #     os.makedirs(self._tmp_folder + '/cache-dir')
 
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('--window-size=1280x1696')
-        # chrome_options.add_argument('--user-data-dir={}'.format(self._tmp_folder + '/user-data'))
         chrome_options.add_argument('--hide-scrollbars')
         chrome_options.add_argument('--enable-logging')
         chrome_options.add_argument('--log-level=0')
         chrome_options.add_argument('--v=99')
         chrome_options.add_argument('--single-process')
-        # chrome_options.add_argument('--data-path={}'.format(self._tmp_folder + '/data-path'))
         chrome_options.add_argument('--ignore-certificate-errors')
-        # chrome_options.add_argument('--homedir={}'.format(self._tmp_folder))
-        # chrome_options.add_argument('--disk-cache-dir={}'.format(self._tmp_folder + '/cache-dir'))
-        # chrome_options.add_argument(
-        #     'user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
 
         BIN_DIR = "/tmp/bin"
-        # BIN_DIR = "/usr/bin"
         CURR_BIN_DIR = "/var/task/bin"
 
         if not os.path.exists(BIN_DIR):

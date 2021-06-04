@@ -1,2 +1,5 @@
 selenium==2.53.6
 beautifulsoup4==4.9.3
+pymysql==1.0.2
+sqlalchemy
+pytz
